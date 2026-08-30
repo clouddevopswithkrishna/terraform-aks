@@ -1,9 +1,13 @@
-output "id" {
-  description = "Resource ID of the node pool."
-  value       = azurerm_kubernetes_cluster_node_pool.this.id
+# =============================================================================
+# AKS Node Pool Module - Outputs
+# =============================================================================
+
+output "node_pool_ids" {
+  description = "Map of node pool name => resource ID"
+  value       = { for k, v in azurerm_kubernetes_cluster_node_pool.this : k => v.id }
 }
 
-output "name" {
-  description = "Name of the node pool."
-  value       = azurerm_kubernetes_cluster_node_pool.this.name
+output "node_pool_names" {
+  description = "List of all user node pool names created"
+  value       = [for v in azurerm_kubernetes_cluster_node_pool.this : v.name]
 }
