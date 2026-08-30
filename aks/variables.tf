@@ -193,11 +193,7 @@ variable "azure_policy_enabled" {
   default     = true
 }
 
-variable "log_analytics_workspace_id" {
-  description = "Resource ID of a Log Analytics Workspace to enable Container Insights (oms_agent). Set to null to disable."
-  type        = string
-  default     = null
-}
+
 
 variable "maintenance_window" {
   description = <<-EOT
