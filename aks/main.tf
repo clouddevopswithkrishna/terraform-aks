@@ -140,7 +140,3 @@ resource "azurerm_kubernetes_cluster" "this" {
     ignore_changes = [
       # Node count can drift from cluster-managed autoscaling; avoid
       # Terraform fighting the autoscaler on every plan.
-      default_node_pool[0].node_count,
-    ]
-  }
-}
