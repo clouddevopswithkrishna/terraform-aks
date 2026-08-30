@@ -108,16 +108,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   # ---------------------------------------------------------------------------
   azure_policy_enabled = var.azure_policy_enabled
 
-  # ---------------------------------------------------------------------------
-  # Optional: Log Analytics / Container Insights
-  # ---------------------------------------------------------------------------
-  dynamic "oms_agent" {
-    for_each = var.log_analytics_workspace_id != null ? [1] : []
-    content {
-      log_analytics_workspace_id = var.log_analytics_workspace_id
-    }
-  }
-
+  
   # ---------------------------------------------------------------------------
   # Optional: maintenance window for node OS / k8s auto-upgrades
   # ---------------------------------------------------------------------------
