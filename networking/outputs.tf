@@ -1,24 +1,29 @@
+# =============================================================================
+# Networking Module - Outputs
+# Consumed primarily by the AKS module (subnet IDs for node pools)
+# =============================================================================
+
 output "vnet_id" {
-  description = "Resource ID of the virtual network."
+  description = "The resource ID of the created Virtual Network"
   value       = azurerm_virtual_network.this.id
 }
 
 output "vnet_name" {
-  description = "Name of the virtual network."
+  description = "The name of the created Virtual Network"
   value       = azurerm_virtual_network.this.name
 }
 
 output "subnet_ids" {
-  description = "Map of subnet logical name -> subnet resource ID."
+  description = "Map of subnet name => subnet resource ID"
   value       = { for k, v in azurerm_subnet.this : k => v.id }
 }
 
 output "subnet_names" {
-  description = "Map of subnet logical name -> subnet name."
-  value       = { for k, v in azurerm_subnet.this : k => v.name }
+  description = "List of all subnet names created"
+  value       = [for s in azurerm_subnet.this : s.name]
 }
 
 output "nsg_ids" {
-  description = "Map of subnet logical name -> associated NSG resource ID."
+  description = "Map of subnet name => NSG resource ID, for subnets that had create_nsg = true"
   value       = { for k, v in azurerm_network_security_group.this : k => v.id }
 }
