@@ -1,48 +1,64 @@
+# =============================================================================
+# Networking Module - Variables
+# =============================================================================
+
 variable "vnet_name" {
-  description = "Name of the virtual network."
-  type        = string
-}
-
-variable "location" {
-  description = "Azure region."
-  type        = string
-}
-
-variable "resource_group_name" {
-  description = "Resource group in which to create networking resources."
+  description = "Name of the Virtual Network"
   type        = string
 }
 
 variable "address_space" {
-  description = "Address space for the virtual network, e.g. [\"10.10.0.0/16\"]."
+  description = "Address space (CIDR blocks) for the Virtual Network"
   type        = list(string)
 }
 
+variable "location" {
+  description = "Azure region where networking resources will be created"
+  type        = string
+}
+
+variable "resource_group_name" {
+  description = "Name of the Resource Group where networking resources will be created"
+  type        = string
+}
+
 variable "dns_servers" {
-  description = "Custom DNS servers for the VNet. Leave empty to use Azure-provided DNS."
+  description = "Optional list of custom DNS servers for the VNet. Leave empty to use Azure-provided DNS."
   type        = list(string)
   default     = []
 }
 
 variable "subnets" {
   description = <<-EOT
-    Map of subnets to create. Key is a logical name (e.g. "aks", "appgw") used to
-    reference the subnet id elsewhere (module.networking.subnet_ids["aks"]).
+    Map of subnets to create. Key = subnet name, Value = subnet configuration.
+
+    Example:
+    subnets = {
+      "snet-aks-system" = {
+        address_prefixes = ["10.10.1.0/24"]
+        create_nsg       = true
+      }
+      "snet-aks-user" = {
+        address_prefixes  = ["10.10.2.0/24"]
+        service_endpoints = ["Microsoft.Storage", "Microsoft.KeyVault"]
+        create_nsg        = true
+      }
+    }
   EOT
   type = map(object({
-    name                               = string
-    address_prefixes                  = list(string)
-    private_endpoint_network_policies = optional(string, "Disabled")
+    address_prefixes  = list(string)
+    service_endpoints = optional(list(string), [])
+    create_nsg         = optional(bool, false)
     delegation = optional(object({
-      name                    = string
+      name                     = string
       service_delegation_name = string
-      actions                 = list(string)
-    }))
+      actions                  = optional(list(string), [])
+    }), null)
   }))
 }
 
 variable "tags" {
-  description = "Tags to apply to networking resources."
+  description = "A map of tags to apply to networking resources"
   type        = map(string)
   default     = {}
 }
