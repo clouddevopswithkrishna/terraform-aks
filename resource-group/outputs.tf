@@ -1,14 +1,19 @@
-output "id" {
-  description = "Resource ID of the resource group."
-  value       = azurerm_resource_group.this.id
-}
+# =============================================================================
+# Resource Group Module - Outputs
+# These outputs are consumed by the networking, identity, and AKS modules
+# =============================================================================
 
 output "name" {
-  description = "Name of the resource group."
+  description = "The name of the created Resource Group"
   value       = azurerm_resource_group.this.name
 }
 
+output "id" {
+  description = "The resource ID of the created Resource Group"
+  value       = azurerm_resource_group.this.id
+}
+
 output "location" {
-  description = "Location of the resource group."
+  description = "The Azure region of the created Resource Group"
   value       = azurerm_resource_group.this.location
 }
